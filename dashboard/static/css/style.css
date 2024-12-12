@@ -1,0 +1,66 @@
+.card {
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    transition: transform 0.2s;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+}
+
+.list-group-item {
+    transition: background-color 0.2s;
+}
+
+.list-group-item:hover {
+    background-color: rgba(29, 185, 84, 0.1);  /* Spotify green with low opacity */
+}
+
+.badge {
+    transition: transform 0.2s;
+}
+
+.list-group-item:hover .badge {
+    transform: scale(1.1);
+}
+
+.navbar-brand {
+    font-weight: bold;
+}
+
+.display-4 {
+    font-size: 2.5rem;
+    font-weight: 600;
+}
+
+/* Custom scrollbar for the lists */
+.list-group {
+    max-height: 400px;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(29, 185, 84, 0.5) transparent;
+}
+
+.list-group::-webkit-scrollbar {
+    width: 6px;
+}
+
+.list-group::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.list-group::-webkit-scrollbar-thumb {
+    background-color: rgba(29, 185, 84, 0.5);
+    border-radius: 3px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .display-4 {
+        font-size: 2rem;
+    }
+    
+    .card-title {
+        font-size: 1.1rem;
+    }
+} 

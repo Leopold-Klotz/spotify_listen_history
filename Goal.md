@@ -30,3 +30,7 @@ I want to create a Python script that collects my Spotify listening data and sto
 ## Next
 
 - [ ] dashboard visualizing the listening history and showing the top artists and tracks
+- [ ] implement duplicate detection to prevent double-saving tracks when script restarts
+- [ ] add timestamp tracking for script stops/starts to identify potential gaps in data collection
+- [ ] implement graceful shutdown to record when the script stops collecting data
+- [ ] add data integrity checks to verify no duplicate entries exist in the CSV
