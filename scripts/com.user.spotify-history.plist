@@ -8,6 +8,7 @@
     <array>
         <string>/usr/bin/python3</string>
         <string>REPLACE_WITH_FULL_PATH/spotify_listen_history/scripts/spotify_listen_history.py</string>
+        <string>--background</string>
     </array>
     <key>RunAtLoad</key>
     <true/>

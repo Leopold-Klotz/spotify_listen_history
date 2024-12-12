@@ -4,24 +4,30 @@ import os
 import time
 import csv
 import spotipy
-from spotipy.oauth2 import SpotifyOAuth
 from datetime import datetime
 import logging
+import sys
+from spotify_auth import get_spotify_tokens
 
-# Set up logging
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(levelname)s - %(message)s',
-    handlers=[
-        logging.FileHandler('spotify_listen_history.log'),
-        logging.StreamHandler()
-    ]
-)
+def setup_logging(is_background=False):
+    """Set up logging configuration based on whether we're running in background"""
+    handlers = [logging.FileHandler('../data/spotify_listen_history.log')]
+    
+    # Only add StreamHandler if not running in background
+    if not is_background:
+        handlers.append(logging.StreamHandler())
+    
+    logging.basicConfig(
+        level=logging.INFO,
+        format='%(asctime)s - %(levelname)s - %(message)s',
+        handlers=handlers
+    )
 
 class SpotifyHistoryCollector:
     def __init__(self):
         self.scope = "user-read-currently-playing user-read-recently-played"
-        self.sp = spotipy.Spotify(auth_manager=SpotifyOAuth(scope=self.scope))
+        access_token, refresh_token = get_spotify_tokens()
+        self.sp = spotipy.Spotify(auth=access_token)
         self.csv_file = "../data/spotify_listen_history.csv"
         self.last_track_id = None
         self.initialize_csv()
@@ -46,6 +52,12 @@ class SpotifyHistoryCollector:
             return None
         except Exception as e:
             logging.error(f"Error getting current track: {e}")
+            # If we get an authentication error, refresh the token
+            if "token expired" in str(e).lower() or "unauthorized" in str(e).lower():
+                logging.info("Refreshing access token...")
+                access_token, _ = get_spotify_tokens()
+                self.sp = spotipy.Spotify(auth=access_token)
+                return self.get_current_track()
             return None
 
     def save_track(self, track):
@@ -81,5 +93,9 @@ class SpotifyHistoryCollector:
                 time.sleep(60)  # Wait longer if there's an error
 
 if __name__ == "__main__":
+    # Check if running in background by looking for command line argument
+    is_background = "--background" in sys.argv
+    setup_logging(is_background)
+    
     collector = SpotifyHistoryCollector()
     collector.run() 
